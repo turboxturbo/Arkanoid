@@ -1,0 +1,42 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class LoginManager : MonoBehaviour
+{
+    [SerializeField] private InputField loginfield;
+    [SerializeField] private InputField passwordfield;
+
+    public void OnClickBtn()
+    {
+        if (!string.IsNullOrEmpty(loginfield.text) && !string.IsNullOrEmpty(passwordfield.text))
+        {
+            ApiRequests.Auth(OnAuthorization, new Logins() { Login = loginfield.text, Password = passwordfield.text });
+        }
+        else
+        {
+            Text loginfieldtext = loginfield.placeholder as Text;
+            loginfieldtext.text = "Заполните все поля";
+
+            Text passwordfieldtext = passwordfield.placeholder as Text;
+            passwordfieldtext.text = "Заполните все поля";
+        }
+
+    }
+    void OnAuthorization(AuthResponse response)
+    {
+        Debug.Log(response.status);
+        if (response.status)
+        {
+            SceneManager.LoadScene("LevelController");
+        }
+        else
+        {
+            Text loginfieldtext = loginfield.placeholder as Text;
+            loginfieldtext.text = "Неверные данные";
+
+            Text passwordfieldtext = passwordfield.placeholder as Text;
+            passwordfieldtext.text = "Неверные данные";
+        }
+    }
+}
