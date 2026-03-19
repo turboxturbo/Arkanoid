@@ -3,29 +3,40 @@ using UnityEngine.SceneManagement;
 
 public class OpenLevelScene : MonoBehaviour
 {
-    private string levelname;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private string scenename;
     public void LoadLevel()
     {
         if (gameObject.name == "1lvlbtn")
         {
-            levelname = "Level1";
+            scenename = "Level1";
+            ResetData();
         }
         else if (gameObject.name == "2lvlbtn")
         {
-            levelname = "Level2";
+            scenename = "Level2";
+            ResetData();
         }
         else if (gameObject.name == "3lvlbtn")
         {
-            levelname = "Level3";
+            scenename = "Level3";
+            ResetData();
         }
         else if (gameObject.name == "Exit")
         {
-            levelname = "LevelController";
+            scenename = "LevelController";
+            ResetData();
         }
+        else if (gameObject.name == "Shopbtn")
+        {
+            scenename = "Shop";
+        }
+
+    }
+    private void ResetData()
+    {
         Time.timeScale = 1f;
         WinManager.win = false;
-        SceneManager.LoadScene(levelname);
+        SceneManager.LoadScene(scenename);
     }
 }
 

@@ -21,14 +21,17 @@ public class LoginManager : MonoBehaviour
             Text passwordfieldtext = passwordfield.placeholder as Text;
             passwordfieldtext.text = "Заполните все поля";
         }
-
     }
     void OnAuthorization(AuthResponse response)
     {
         Debug.Log(response.status);
+        Debug.Log(response.iduser);
+
         if (response.status)
         {
             SceneManager.LoadScene("LevelController");
+            PlayerPrefs.SetInt("CurrentUserId", response.iduser);
+            PlayerPrefs.Save();
         }
         else
         {

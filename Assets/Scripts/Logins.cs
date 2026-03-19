@@ -13,4 +13,5 @@ public class Logins
 public class AuthResponse
 {
     public bool status;
+    public int iduser;
 }

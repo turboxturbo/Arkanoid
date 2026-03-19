@@ -19,6 +19,7 @@ public static class ApiRequests
     {
         GameManager.instance.StartCoroutine(AuthCoroutine(callback, login));
     }
+    //public static void MyScins();
     public static IEnumerator GetUsersCoroutine(Action<string> callback)
     {
         using(UnityWebRequest request = UnityWebRequest.Get(apiUrl + "UsersLogins/getAllUsers"))
@@ -62,7 +63,7 @@ public static class ApiRequests
             }
         }
     }
-
+    //getcurrentuserdata
     public static IEnumerator CreateUsersCoroutine(Action<UserCreateResponse> callback, Users user)
     {
         string jsonData = JsonUtility.ToJson(user);
