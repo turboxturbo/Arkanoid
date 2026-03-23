@@ -19,7 +19,41 @@ public static class ApiRequests
     {
         GameManager.instance.StartCoroutine(AuthCoroutine(callback, login));
     }
-    //public static void MyScins();
+    public static void GetMyScins(Action<Answer> callback, CurrentUser currentUser)
+    {
+        GameManager.instance.StartCoroutine(GetMyScinsCoroutine(callback, currentUser));
+    }
+    public static void GetMyCoins(Action<Coins> callback, CurrentUser currentUser)
+    {
+        GameManager.instance.StartCoroutine(GetMyCoinsCoroutine(callback, currentUser));
+    }
+    public static IEnumerator GetMyCoinsCoroutine(Action<Coins> callback, CurrentUser currentUser)
+    {
+        string jsonData = JsonUtility.ToJson(currentUser);
+        Debug.Log(jsonData);
+        byte[] bodyRow = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+        using (UnityWebRequest request = new UnityWebRequest(apiUrl + "UsersLogins/getmycoins", "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRow);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string jsonResponse = request.downloadHandler.text;
+                Coins answer = JsonUtility.FromJson<Coins>(jsonResponse);
+                Debug.Log(answer);
+                callback?.Invoke(answer);
+            }
+            else
+            {
+                Debug.Log(request.error);
+            }
+        }
+    }
     public static IEnumerator GetUsersCoroutine(Action<string> callback)
     {
         using(UnityWebRequest request = UnityWebRequest.Get(apiUrl + "UsersLogins/getAllUsers"))
@@ -29,6 +63,33 @@ public static class ApiRequests
             if(request.result == UnityWebRequest.Result.Success)
             {
                 callback.Invoke(request.downloadHandler.text);
+            }
+            else
+            {
+                Debug.Log(request.error);
+            }
+        }
+    }
+    public static IEnumerator GetMyScinsCoroutine(Action<Answer> callback, CurrentUser currentUser)
+    {
+        string jsonData = JsonUtility.ToJson(currentUser);
+        Debug.Log(jsonData);
+        byte[] bodyRow = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+        using (UnityWebRequest request = new UnityWebRequest(apiUrl + "UsersLogins/getcurrentuserdata", "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRow);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string jsonResponse = request.downloadHandler.text;
+                Answer answer = JsonUtility.FromJson<Answer>(jsonResponse);
+                Debug.Log(answer);
+                callback?.Invoke(answer);
             }
             else
             {
@@ -63,7 +124,6 @@ public static class ApiRequests
             }
         }
     }
-    //getcurrentuserdata
     public static IEnumerator CreateUsersCoroutine(Action<UserCreateResponse> callback, Users user)
     {
         string jsonData = JsonUtility.ToJson(user);

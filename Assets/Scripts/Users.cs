@@ -15,3 +15,10 @@ public class UserCreateResponse
 {
     public bool status;
 }
+
+[Serializable]
+public class Coins
+{
+    public int coins;
+}
+

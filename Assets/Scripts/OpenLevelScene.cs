@@ -30,13 +30,12 @@ public class OpenLevelScene : MonoBehaviour
         {
             scenename = "Shop";
         }
-
+        SceneManager.LoadScene(scenename);
     }
     private void ResetData()
     {
         Time.timeScale = 1f;
         WinManager.win = false;
-        SceneManager.LoadScene(scenename);
     }
 }
 
