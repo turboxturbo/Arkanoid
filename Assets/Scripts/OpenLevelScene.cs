@@ -30,6 +30,11 @@ public class OpenLevelScene : MonoBehaviour
         {
             scenename = "Shop";
         }
+        else if (gameObject.name == "ExitShopBtn")
+        {
+            scenename = "LevelController";
+        }
+
         SceneManager.LoadScene(scenename);
     }
     private void ResetData()

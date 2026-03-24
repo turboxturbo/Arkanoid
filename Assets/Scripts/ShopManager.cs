@@ -1,7 +1,19 @@
+using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour
 {
+    [SerializeField] Text coinstext;
+    [SerializeField] Transform scrollContent;
+    [SerializeField] GameObject itemscroll;
+    private List<UserScins> myscins = new();
+    private List<Scins> allscins = new();
+    private bool myscinsLoaded = false;
+    private bool allscinsisloaded = false;
+
     void Start()
     {
         LoadShopData();
@@ -13,15 +25,53 @@ public class ShopManager : MonoBehaviour
         {
             return;
         }
-        ApiRequests.GetMyScins(OnLoadScinsReceived, new CurrentUser { userId = userid });
+        ApiRequests.GetMyScins(OnLoadMyScinsReceived, new CurrentUser { userId = userid });
         ApiRequests.GetMyCoins(OnLoadCoinsReceived, new CurrentUser { userId = userid });
+        ApiRequests.GetAllScins(OnLoadAllScinsReceived);
     }
-    void OnLoadScinsReceived(Answer answer)
+    void OnLoadMyScinsReceived(Answer answer)
     {
          Debug.Log("Scins received: " + answer.data.userscins.Count);
+         myscins = answer.data.userscins;
+         myscinsLoaded = true;
+        TryLoadScrollView();
     }
-    void OnLoadCoinsReceived(Coins coins)
+    void OnLoadAllScinsReceived(AllScins scins)
     {
-        Debug.Log("Coins received: " + coins.coins);
+        Debug.Log("All scins received: " + scins.data.scins.Count);
+        allscins = scins.data.scins;
+        allscinsisloaded = true;
+        TryLoadScrollView();
+    }
+    void TryLoadScrollView()
+    {
+        if (allscinsisloaded && myscinsLoaded && allscins.Count > 0)
+        {
+            LoadScrollView();
+        }
+    }
+    void OnLoadCoinsReceived(CoinsAnswer coins)
+    {
+        Debug.Log("Coins received: " + coins.user.coins);
+        PlayerPrefs.SetInt("CurrentUserCoins", coins.user.coins);
+        PlayerPrefs.Save();
+        coinstext.text = "Coins: " + coins.user.coins.ToString();
+    }
+    void LoadScrollView()
+    {
+        Debug.Log("activate loadscroll");
+        foreach (Transform item in scrollContent)
+        {
+            Destroy(item.gameObject);
+        }
+
+        foreach (var scin in allscins)
+        {
+            bool isOwned = myscins.Any(u => u.idScin == scin.idScin);
+            
+            var iteminscroll = Instantiate(itemscroll, scrollContent);
+            var itemview = iteminscroll.GetComponent<ScrollViewItems>();
+            itemview.SetData(scin, isOwned);
+        }
     }
 }

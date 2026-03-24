@@ -23,11 +23,76 @@ public static class ApiRequests
     {
         GameManager.instance.StartCoroutine(GetMyScinsCoroutine(callback, currentUser));
     }
-    public static void GetMyCoins(Action<Coins> callback, CurrentUser currentUser)
+    public static void GetMyCoins(Action<CoinsAnswer> callback, CurrentUser currentUser)
     {
         GameManager.instance.StartCoroutine(GetMyCoinsCoroutine(callback, currentUser));
     }
-    public static IEnumerator GetMyCoinsCoroutine(Action<Coins> callback, CurrentUser currentUser)
+    public static void GetAllScins(Action<AllScins> callback)
+    {
+        GameManager.instance.StartCoroutine(GelAllScinsCoroutine(callback));
+    }
+
+    public static void BuyScin(Action<BuyScinResponse> callback, BuyScin buyScin)
+    {
+        GameManager.instance.StartCoroutine(BuyScinCoroutine(callback, buyScin));
+    }
+
+    public static void DecreaseCoins(Action<UpdateCoinsResponse> callback, BuyScin buyScin)
+    {
+        GameManager.instance.StartCoroutine(DecreaseCoinsCoroutine(callback, buyScin));
+    }
+
+    public static IEnumerator DecreaseCoinsCoroutine(Action<UpdateCoinsResponse> callback, BuyScin buyScin)
+    {
+        string jsonData = JsonUtility.ToJson(buyScin);
+        Debug.Log(jsonData);
+        byte[] bodyRow = System.Text.Encoding.UTF8.GetBytes(jsonData);
+        using (UnityWebRequest request = new UnityWebRequest(apiUrl + "UsersLogins/updatecoins", "PUT"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRow);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string jsonResponse = request.downloadHandler.text;
+                UpdateCoinsResponse answer = JsonUtility.FromJson<UpdateCoinsResponse>(jsonResponse);
+                Debug.Log(answer);
+                callback?.Invoke(answer);
+            }
+            else
+            {
+                Debug.Log(request.error);
+            }
+        }
+    }
+
+    public static IEnumerator BuyScinCoroutine(Action<BuyScinResponse> callback, BuyScin buyScin)
+    {
+        string jsonData = JsonUtility.ToJson(buyScin);
+        Debug.Log(jsonData);
+        byte[] bodyRow = System.Text.Encoding.UTF8.GetBytes(jsonData);
+        using (UnityWebRequest request = new UnityWebRequest(apiUrl + "UsersLogins/buyscin", "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRow);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string jsonResponse = request.downloadHandler.text;
+                BuyScinResponse answer = JsonUtility.FromJson<BuyScinResponse>(jsonResponse);
+                Debug.Log(answer);
+                callback?.Invoke(answer);
+            }
+            else
+            {
+                Debug.Log(request.error);
+            }
+        }
+    }
+
+    public static IEnumerator GetMyCoinsCoroutine(Action<CoinsAnswer> callback, CurrentUser currentUser)
     {
         string jsonData = JsonUtility.ToJson(currentUser);
         Debug.Log(jsonData);
@@ -44,7 +109,7 @@ public static class ApiRequests
             if (request.result == UnityWebRequest.Result.Success)
             {
                 string jsonResponse = request.downloadHandler.text;
-                Coins answer = JsonUtility.FromJson<Coins>(jsonResponse);
+                CoinsAnswer answer = JsonUtility.FromJson<CoinsAnswer>(jsonResponse);
                 Debug.Log(answer);
                 callback?.Invoke(answer);
             }
@@ -63,6 +128,25 @@ public static class ApiRequests
             if(request.result == UnityWebRequest.Result.Success)
             {
                 callback.Invoke(request.downloadHandler.text);
+            }
+            else
+            {
+                Debug.Log(request.error);
+            }
+        }
+    }
+    public static IEnumerator GelAllScinsCoroutine(Action<AllScins> callback)
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get(apiUrl + "UsersLogins/getallscins"))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string jsonResponse = request.downloadHandler.text;
+                AllScins answer = JsonUtility.FromJson<AllScins>(jsonResponse);
+                Debug.Log(answer);
+                callback?.Invoke(answer);
             }
             else
             {
