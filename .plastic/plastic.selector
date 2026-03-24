@@ -1,4 +1,0 @@
-repository "testproject/Arkanoid@10171492084302@cloud"
-  path "/"
-    br "/main"
-    co "/main"
