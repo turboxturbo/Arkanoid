@@ -42,6 +42,36 @@ public static class ApiRequests
         GameManager.instance.StartCoroutine(DecreaseCoinsCoroutine(callback, buyScin));
     }
 
+    public static void IncreaseCoins(Action<PlusCoinsResponse> callback, CurrentUser currentUser)
+    {
+        GameManager.instance.StartCoroutine(IncreaseCoinsCoroutine(callback, currentUser));
+    }
+    
+    public static IEnumerator IncreaseCoinsCoroutine(Action<PlusCoinsResponse> callback, CurrentUser currentUser)
+    {
+        string jsonData = JsonUtility.ToJson(currentUser);
+        Debug.Log(jsonData);
+        byte[] bodyRow = System.Text.Encoding.UTF8.GetBytes(jsonData);
+        using (UnityWebRequest request = new UnityWebRequest(apiUrl + "UsersLogins/pluscoins", "PUT"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRow);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                string jsonResponse = request.downloadHandler.text;
+                PlusCoinsResponse answer = JsonUtility.FromJson<PlusCoinsResponse>(jsonResponse);
+                Debug.Log(answer);
+                callback?.Invoke(answer);
+            }
+            else
+            {
+                Debug.Log(request.error);
+            }
+        }
+    }
+
     public static IEnumerator DecreaseCoinsCoroutine(Action<UpdateCoinsResponse> callback, BuyScin buyScin)
     {
         string jsonData = JsonUtility.ToJson(buyScin);

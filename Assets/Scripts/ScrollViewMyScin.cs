@@ -10,9 +10,11 @@ public class ScrollViewMyScin : MonoBehaviour, IPointerEnterHandler, IPointerCli
     [SerializeField] private Text price;
     [SerializeField] private Text namescin;
     [SerializeField] private List<Sprite> sprites;
+    private UserScins currentscin;
 
     public void LoadData(UserScins scin)
     {
+        currentscin = scin;
         price.text = scin.scins.price.ToString();
         namescin.text = scin.scins.nameScin;
         LoadScin(scin);
@@ -20,7 +22,7 @@ public class ScrollViewMyScin : MonoBehaviour, IPointerEnterHandler, IPointerCli
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        //PlayerPrefs.SetString("CurrentScin", eventData);
+        PlayerPrefs.SetString("CurrentScin", currentscin.scins.nameScin);
         PlayerPrefs.Save();
         Debug.Log("Текущий скин: " + PlayerPrefs.GetString("CurrentScin", "scin3"));
     }

@@ -19,3 +19,11 @@ public class UpdateCoinsResponse
 {
     public bool status;
 }
+
+
+[Serializable]
+public class PlusCoinsResponse
+{
+    public bool status;
+    public int coins;
+}

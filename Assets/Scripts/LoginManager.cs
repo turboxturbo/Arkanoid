@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class LoginManager : MonoBehaviour
 {
@@ -17,9 +18,11 @@ public class LoginManager : MonoBehaviour
         {
             Text loginfieldtext = loginfield.placeholder as Text;
             loginfieldtext.text = "Заполните все поля";
+            loginfield.text = "";
 
             Text passwordfieldtext = passwordfield.placeholder as Text;
             passwordfieldtext.text = "Заполните все поля";
+            passwordfield.text = "";
         }
     }
     void OnAuthorization(AuthResponse response)
@@ -37,9 +40,11 @@ public class LoginManager : MonoBehaviour
         {
             Text loginfieldtext = loginfield.placeholder as Text;
             loginfieldtext.text = "Неверные данные";
+            loginfield.text = "";
 
             Text passwordfieldtext = passwordfield.placeholder as Text;
             passwordfieldtext.text = "Неверные данные";
+            passwordfield.text = "";
         }
     }
 }

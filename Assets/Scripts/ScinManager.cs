@@ -1,18 +1,19 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScinManager : MonoBehaviour
 {
     //[SerializeField] private GameObject item;
     [SerializeField] private Transform scrollcontent;
-    [SerializeField] GameObject itemscroll;
+    [SerializeField] private GameObject itemscroll;
     private List<UserScins> scins;
     void Start()
     {
-        LoadMyScin();
+        LoadMyData();
     }
-    void LoadMyScin()
+    void LoadMyData()
     {
         int userid = PlayerPrefs.GetInt("CurrentUserId", 0);
         if (userid == 0)
