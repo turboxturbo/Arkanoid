@@ -34,7 +34,7 @@ public class ShopManager : MonoBehaviour
          Debug.Log("Scins received: " + answer.data.userscins.Count);
          myscins = answer.data.userscins;
          myscinsLoaded = true;
-        TryLoadScrollView();
+         TryLoadScrollView();
     }
     void OnLoadAllScinsReceived(AllScins scins)
     {

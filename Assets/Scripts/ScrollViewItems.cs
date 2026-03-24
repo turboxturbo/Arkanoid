@@ -14,7 +14,7 @@ public class ScrollViewItems : MonoBehaviour, IPointerEnterHandler
     [SerializeField] private GameObject button;
     [SerializeField] private List<Sprite> sprites;
     [SerializeField] private Image scinimage;
-    [SerializeField] private GameObject selectbutton;
+    //[SerializeField] private GameObject selectbutton;
     private bool coinsisloaded = false;
     private bool scinisloaded = false;
     private Scins currentscin;
@@ -32,8 +32,8 @@ public class ScrollViewItems : MonoBehaviour, IPointerEnterHandler
         buybtn.onClick.RemoveAllListeners();
         buybtn.onClick.AddListener(ClickBtnBuy);
 
-        Button selectbtn = selectbutton.GetComponent<Button>();
-        selectbtn.onClick.RemoveAllListeners();
+        //Button selectbtn = selectbutton.GetComponent<Button>();
+        //selectbtn.onClick.RemoveAllListeners();
         //selectbtn.onClick
     }
     private void LoadScin(Scins scin)

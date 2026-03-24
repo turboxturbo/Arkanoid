@@ -34,7 +34,10 @@ public class OpenLevelScene : MonoBehaviour
         {
             scenename = "LevelController";
         }
-
+        else if (gameObject.name == "SelectScinBtn")
+        {
+            scenename = "ScinController";
+        }
         SceneManager.LoadScene(scenename);
     }
     private void ResetData()
