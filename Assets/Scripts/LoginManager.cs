@@ -35,6 +35,9 @@ public class LoginManager : MonoBehaviour
             SceneManager.LoadScene("LevelController");
             PlayerPrefs.SetInt("CurrentUserId", response.iduser);
             PlayerPrefs.Save();
+
+            PlayerPrefs.SetString("CurrentScin", "scin3");
+            PlayerPrefs.Save();
         }
         else
         {

@@ -38,7 +38,11 @@ public class OpenLevelScene : MonoBehaviour
         {
             scenename = "ScinController";
         }
-        SceneManager.LoadScene(scenename);
+        else if (gameObject.name == "LogOutBtn")
+        {
+            scenename = "LoginController";
+        }
+            SceneManager.LoadScene(scenename);
     }
     private void ResetData()
     {
